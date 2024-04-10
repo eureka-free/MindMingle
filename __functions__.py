@@ -11,6 +11,7 @@ def pandas_ince_ayar():
     pd.set_option('display.float_format', lambda x: "%.1f" % x)
     warnings.simplefilter(action='ignore', category=Warning)
 
+
 # Fonksiyonu çağırarak ayarları belirleyebilirsiniz
 #pandas_ince_ayar()
 
@@ -28,6 +29,8 @@ def check_df(dataframe, head=5):
     print(dataframe.isnull().sum())
     print("##################### Quantiles #####################")
     print(dataframe.describe([0, 0.05, 0.50, 0.95, 0.99, 1]).T)
+    print("##################### Nunique #####################")
+    print(dataframe.nunique())
 
 
 def num_summary(dataframe, numerical_col, plot=False):
@@ -62,12 +65,30 @@ def high_correlated_cols(dataframe, plot=False, corr_th=0.90):
         plt.show()
     return drop_list
 
+
 '''
 high_correlated_cols(df)
 drop_list = high_correlated_cols(df, plot=True)
 df.drop(drop_list, axis=1)
 high_correlated_cols(df.drop(drop_list, axis=1), plot=True)
 '''
+
+
+def missing_values_table(dataframe, na_name=True):
+    na_columns = [col for col in dataframe.columns if dataframe[col].isnull().sum() > 0]
+
+    n_miss = dataframe[na_columns].isnull().sum().sort_values(ascending=False)
+
+    ratio = (dataframe[na_columns].isnull().sum() / dataframe.shape[0] * 100).sort_values(ascending=False)
+
+    missing_df = pd.concat([n_miss, np.round(ratio, 2)], axis=1, keys=['n_miss', 'ratio'])
+
+    print(missing_df, end="\n")
+
+    if na_name:
+        return na_columns
+
+
 def create_rfm(dataframe):
     # Veriyi Hazırlma
     dataframe["order_num_total"] = (dataframe["order_num_total_ever_online"]
@@ -76,7 +97,6 @@ def create_rfm(dataframe):
                                          + dataframe["customer_value_total_ever_online"])
     date_columns = dataframe.columns[dataframe.columns.str.contains("date")]
     dataframe[date_columns] = dataframe[date_columns].apply(pd.to_datetime)
-
 
     # RFM METRIKLERININ HESAPLANMASI
     dataframe["last_order_date"].max()  # 2021-05-30
@@ -92,8 +112,9 @@ def create_rfm(dataframe):
     rfm["frequency_score"] = pd.qcut(rfm['frequency'].rank(method="first"), 5, labels=[1, 2, 3, 4, 5])
     rfm["monetary_score"] = pd.qcut(rfm['monetary'], 5, labels=[1, 2, 3, 4, 5])
     rfm["RF_SCORE"] = (rfm['recency_score'].astype(str) + rfm['frequency_score'].astype(str))
-    rfm["RFM_SCORE"] = (rfm['recency_score'].astype(str) + rfm['frequency_score'].astype(str) + rfm['monetary_score'].astype(str))
-
+    rfm["RFM_SCORE"] = (
+                rfm['recency_score'].astype(str) + rfm['frequency_score'].astype(str) + rfm['monetary_score'].astype(
+            str))
 
     # SEGMENTLERIN ISIMLENDIRILMESI
     seg_map = {
@@ -110,7 +131,8 @@ def create_rfm(dataframe):
     }
     rfm['segment'] = rfm['RF_SCORE'].replace(seg_map, regex=True)
 
-    return rfm[["customer_id", "recency","frequency","monetary","RF_SCORE","RFM_SCORE","segment"]]
+    return rfm[["customer_id", "recency", "frequency", "monetary", "RF_SCORE", "RFM_SCORE", "segment"]]
+
 
 def outlier_thresholds(dataframe, col_name, q1=0.25, q3=0.75):
     """
@@ -142,14 +164,15 @@ def outlier_thresholds(dataframe, col_name, q1=0.25, q3=0.75):
 
 
 def create_cltv_df(dataframe):
-
     # Veriyi Hazırlama
-    columns = ["order_num_total_ever_online", "order_num_total_ever_offline", "customer_value_total_ever_offline","customer_value_total_ever_online"]
+    columns = ["order_num_total_ever_online", "order_num_total_ever_offline", "customer_value_total_ever_offline",
+               "customer_value_total_ever_online"]
     for col in columns:
         replace_with_thresholds(dataframe, col)
 
     dataframe["order_num_total"] = dataframe["order_num_total_ever_online"] + dataframe["order_num_total_ever_offline"]
-    dataframe["customer_value_total"] = dataframe["customer_value_total_ever_offline"] + dataframe["customer_value_total_ever_online"]
+    dataframe["customer_value_total"] = dataframe["customer_value_total_ever_offline"] + dataframe[
+        "customer_value_total_ever_online"]
     dataframe = dataframe[~(dataframe["customer_value_total"] == 0) | (dataframe["order_num_total"] == 0)]
     date_columns = dataframe.columns[dataframe.columns.str.contains("date")]
     dataframe[date_columns] = dataframe[date_columns].apply(pd.to_datetime)
@@ -159,7 +182,8 @@ def create_cltv_df(dataframe):
     analysis_date = dt.datetime(2021, 6, 1)
     cltv_df = pd.DataFrame()
     cltv_df["customer_id"] = dataframe["master_id"]
-    cltv_df["recency_cltv_weekly"] = ((dataframe["last_order_date"] - dataframe["first_order_date"]).astype('timedelta64[D]')) / 7
+    cltv_df["recency_cltv_weekly"] = ((dataframe["last_order_date"] - dataframe["first_order_date"]).astype(
+        'timedelta64[D]')) / 7
     cltv_df["T_weekly"] = ((analysis_date - dataframe["first_order_date"]).astype('timedelta64[D]')) / 7
     cltv_df["frequency"] = dataframe["order_num_total"]
     cltv_df["monetary_cltv_avg"] = dataframe["customer_value_total"] / dataframe["order_num_total"]
@@ -204,9 +228,10 @@ def create_cltv_df(dataframe):
 
 def time_based_weighted_average(dataframe, w1=30, w2=28, w3=26, w4=16):
     return dataframe.loc[df["recency_cut"] == "q1", "overall"].mean() * w1 / 100 + \
-           dataframe.loc[df["recency_cut"] == "q2", "overall"].mean() * w2 / 100 + \
-           dataframe.loc[df["recency_cut"] == "q3", "overall"].mean() * w3 / 100 + \
-           dataframe.loc[df["recency_cut"] == "q4", "overall"].mean() * w4 / 100
+        dataframe.loc[df["recency_cut"] == "q2", "overall"].mean() * w2 / 100 + \
+        dataframe.loc[df["recency_cut"] == "q3", "overall"].mean() * w3 / 100 + \
+        dataframe.loc[df["recency_cut"] == "q4", "overall"].mean() * w4 / 100
+
 
 #time_based_weighted_average(df)
 
@@ -283,9 +308,21 @@ def grab_col_names(dataframe, cat_th=10, car_th=20):
     return cat_cols, num_cols, cat_but_car
 
 
-def grab_outliers(dataframe, col_name, index=False):
-    '''
+def grab_col_names(dataframe, cat_th=10, car_th=20, exclude_cols=None):
+    if exclude_cols is None:
+        exclude_cols = []
 
+    cat_cols = [col for col in dataframe.columns if dataframe[col].dtypes == "O" and col not in exclude_cols]
+    num_but_cat = [col for col in dataframe.columns if
+                   dataframe[col].nunique() < cat_th and dataframe[col].dtypes != "O"]
+    cat_but_car = [col for col in dataframe.columns if
+                   dataframe[col].nunique() > car_th and dataframe[col].dtypes == "O"]
+
+    return cat_cols, num_but_cat, cat_but_car
+
+
+def grab_outliers(dataframe, col_name, index=False):
+    """
     Fonksiyon, verilen dataframe için verilen değişkende yer alan aykırı değerleri getirir. Bun fonksiyon
     "outlier_thresholds" fonksiyonunu içinde barındırdığı için bu fonksiyona bağımlılığı vardır. outlier_tresholds
     fonksiyonu tanımlanmadan kullanılamaz.
@@ -300,7 +337,7 @@ def grab_outliers(dataframe, col_name, index=False):
     -------
     Şayet "index" değeri true girilmişse yaklanan aykırı gözlemlerin indexlerini return eder
 
-    '''
+    """
 
     low, up = outlier_thresholds(dataframe, col_name, index=False)
 
@@ -312,6 +349,13 @@ def grab_outliers(dataframe, col_name, index=False):
     if index:
         outlier_index = dataframe[((dataframe[col_name] < low) | (dataframe[col_name] > up))].index
         return outlier_index
+
+
+def grab_col_names(df, cat_th=10, car_th=20):
+    cat_cols = [col for col in df.columns if df[col].dtypes == "object"]
+    num_but_cat = [col for col in df.columns if df[col].nunique() < cat_th and df[col].dtypes != "object"]
+    cat_but_car = [col for col in df.columns if df[col].nunique() > car_th and df[col].dtypes != "object"]
+    return cat_cols, num_but_cat, cat_but_car
 
 
 def remove_outlier(dataframe, col_name):
@@ -508,6 +552,7 @@ def rare_analyser(dataframe, target, cat_cols):
                             "RATIO": dataframe[col].value_counts() / len(dataframe),
                             "TARGET_MEAN": dataframe.groupby(col)[target].mean()}), end="\n\n\n")
 
+
 # rare_analyser(df, "TARGET", cat_cols)
 
 def rare_encoder(dataframe, rare_perc):
@@ -540,6 +585,7 @@ def rare_encoder(dataframe, rare_perc):
 def score_pos_neg_diff(pos, neg):
     return pos - neg
 
+
 #df["score_pos_neg_diff"] = score_pos_neg_diff(df["helpful_yes"], df["helpful_no"])
 
 
@@ -547,6 +593,7 @@ def score_average_rating(pos, neg):
     if pos + neg == 0:
         return 0
     return pos / (pos + neg)
+
 
 #df["score_average_rating"] = df.apply(lambda x: score_average_rating(x["helpful_yes"], x["helpful_no"]), axis=1)
 
@@ -566,6 +613,8 @@ def plot_importance(model, features, num=len(X), save=False):
 
 #plot_importance(rf_model, X_train)
 '''
+
+
 def wilson_lower_bound(pos, neg, confidence=0.95):
     n = pos + neg
     if n == 0:
@@ -573,7 +622,6 @@ def wilson_lower_bound(pos, neg, confidence=0.95):
     z = st.norm.ppf(1 - (1 - confidence) / 2)
     phat = 1.0 * pos / n
     return (phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) / (1 + z * z / n)
-
 
 
 #df["wilson_lower_bound"] = df.apply(lambda x: wilson_lower_bound(x["helpful_yes"], x["helpful_no"]), axis=1)
@@ -597,6 +645,7 @@ def create_user_movie_df():
     user_movie_df = common_movies.pivot_table(index=["userId"], columns=["title"], values="rating")
     return user_movie_df
 
+
 #user_movie_df = create_user_movie_df()
 
 #user_movie_df.head()
@@ -606,21 +655,22 @@ def arl_recommender(rules_df, product_id, rec_count=1):
     sorted_rules = rules_df.sort_values("lift", ascending=False)
     # kuralları lifte göre büyükten kücüğe sıralar. (en uyumlu ilk ürünü yakalayabilmek için)
     # confidence'e göre de sıralanabilir insiyatife baglıdır.
-    recommendation_list = [] # tavsiye edilecek ürünler için bos bir liste olusturuyoruz.
+    recommendation_list = []  # tavsiye edilecek ürünler için bos bir liste olusturuyoruz.
     # antecedents: X
     #items denildigi için frozenset olarak getirir. index ve hizmeti birleştirir.
     # i: index
     # product: X yani öneri isteyen hizmet
     for i, product in sorted_rules["antecedents"].items():
-        for j in list(product): # hizmetlerde(product) gez:
-            if j == product_id:# eger tavsiye istenen ürün yakalanırsa:
+        for j in list(product):  # hizmetlerde(product) gez:
+            if j == product_id:  # eger tavsiye istenen ürün yakalanırsa:
                 recommendation_list.append(list(sorted_rules.iloc[i]["consequents"]))
                 # index bilgisini i ile tutuyordun bu index bilgisindeki consequents(Y) değerini recommendation_list'e ekle.
     # tavsiye listesinde tekrarlamayı önlemek için:
     # mesela 2'li 3'lü kombinasyonlarda aynı ürün tekrar düşmüş olabilir listeye gibi;
     # sözlük yapısının unique özelliginden yararlanıyoruz.
     recommendation_list = list({item for item_list in recommendation_list for item in item_list})
-    return recommendation_list[:rec_count] # :rec_count istenen sayıya kadar tavsiye ürün getir.
+    return recommendation_list[:rec_count]  # :rec_count istenen sayıya kadar tavsiye ürün getir.
+
 
 #arl_recommender(rules,"2_0", 3)
 
@@ -653,6 +703,8 @@ def val_curve_params(model, X, y, param_name, param_range, scoring="roc_auc", cv
     plt.tight_layout()
     plt.legend(loc='best')
     plt.show()
+
+
 '''
 rf_val_params = [["max_depth", [5, 8, 15, 20, 30, None]],
                  ["max_features", [3, 5, 7, "auto"]],
@@ -670,7 +722,8 @@ rf_val_params[0][1]
 
 
 def quick_missing_imp(data, num_method="median", cat_length=20, target="SalePrice"):
-    variables_with_na = [col for col in data.columns if data[col].isnull().sum() > 0]  # Eksik değere sahip olan değişkenler listelenir
+    variables_with_na = [col for col in data.columns if
+                         data[col].isnull().sum() > 0]  # Eksik değere sahip olan değişkenler listelenir
 
     temp_target = data[target]
 
@@ -678,7 +731,8 @@ def quick_missing_imp(data, num_method="median", cat_length=20, target="SalePric
     print(data[variables_with_na].isnull().sum(), "\n\n")  # Uygulama öncesi değişkenlerin eksik değerlerinin sayısı
 
     # değişken object ve sınıf sayısı cat_lengthe eşit veya altındaysa boş değerleri mode ile doldur
-    data = data.apply(lambda x: x.fillna(x.mode()[0]) if (x.dtype == "O" and len(x.unique()) <= cat_length) else x, axis=0)
+    data = data.apply(lambda x: x.fillna(x.mode()[0]) if (x.dtype == "O" and len(x.unique()) <= cat_length) else x,
+                      axis=0)
 
     # num_method mean ise tipi object olmayan değişkenlerin boş değerleri ortalama ile dolduruluyor
     if num_method == "mean":
@@ -715,6 +769,7 @@ def stress_concentration_interaction(row):
     else:
         return 'Other'
 
+
 def psychological_response_habits_interaction(row):
     if row['Aggressive Response'] == 'YES' and row['Changes_Habits'] == 'Yes':
         return 'Aggressive_ChangeHabits'
@@ -732,6 +787,7 @@ def family_history_treatment_interaction(row):
     else:
         return 'Other'
 
+
 def occupation_stress_level_interaction(row):
     if row['Occupation'] in ['Corporate', 'Student'] and row['Growing_Stress'] == 'Yes':
         return 'HighStress_Job'
@@ -746,4 +802,3 @@ def extract_number_from_string(dataframe, col):
     dataframe[col] = dataframe[col].str.split().str[0]
     dataframe[col] = pd.to_numeric(dataframe[col])
     return dataframe
-
