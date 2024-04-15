@@ -1,8 +1,9 @@
-import warnings
+from scipy.stats import stats
+from sklearn.model_selection import validation_curve
 
-import numpy as np
+from __1lib__ import *
+
 import pandas as pd
-
 
 def pandas_ince_ayar():
     pd.set_option('display.max_columns', None)
@@ -90,7 +91,7 @@ def missing_values_table(dataframe, na_name=True):
         return na_columns
 
 
-def create_rfm(dataframe):
+def create_rfm(dataframe, dt=None):
     # Veriyi Hazırlma
     dataframe["order_num_total"] = (dataframe["order_num_total_ever_online"]
                                     + dataframe["order_num_total_ever_offline"])
@@ -164,7 +165,15 @@ def outlier_thresholds(dataframe, col_name, q1=0.25, q3=0.75):
     return low_limit, up_limit
 
 
-def create_cltv_df(dataframe):
+class GammaGammaFitter:
+    pass
+
+
+class BetaGeoFitter:
+    pass
+
+
+def create_cltv_df(dataframe, dt=None):
     # Veriyi Hazırlama
     columns = ["order_num_total_ever_online", "order_num_total_ever_offline", "customer_value_total_ever_offline",
                "customer_value_total_ever_online"]
@@ -228,6 +237,7 @@ def create_cltv_df(dataframe):
 
 
 def time_based_weighted_average(dataframe, w1=30, w2=28, w3=26, w4=16):
+    from __3verihazırlama_eda__ import df
     return dataframe.loc[df["recency_cut"] == "q1", "overall"].mean() * w1 / 100 + \
         dataframe.loc[df["recency_cut"] == "q2", "overall"].mean() * w2 / 100 + \
         dataframe.loc[df["recency_cut"] == "q3", "overall"].mean() * w3 / 100 + \
