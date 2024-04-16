@@ -12,6 +12,9 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+# Html
+# pip install Flask
+from flask import Flask, request, render_template_string
 
 # Streamlit
 import streamlit as st
@@ -65,5 +68,11 @@ from sklearn.metrics import classification_report, accuracy_score
 import google.generativeai as genai
 import genai
 import os
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.ensemble import StackingClassifier
+
+# model kaydetme
+import pickle
 import joblib
 import math

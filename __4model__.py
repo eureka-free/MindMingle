@@ -85,53 +85,31 @@ model_performance.sort(key=lambda x: x[1], reverse=True)
 # Performans değerlerini göstermek için değişkeni döndürme
 model_performance
 
-# Modeli test seti üzerinde değerlendirme
-y_pred = models[0][1].predict(X_test)  # En iyi performans gösteren modeli kullanıyorum varsayalım
+# GBM modelini başlatma
+gbm_model = GradientBoostingClassifier(random_state=42)
 
-# Performans metriklerini yazdırma
-print(classification_report(y_test, y_pred))
-print(confusion_matrix(y_test, y_pred))
+# Modeli eğitme
+gbm_model.fit(X_train, y_train)
 
+# Test verileri üzerinde modeli değerlendirme
+y_pred_gbm = gbm_model.predict(X_test)
+accuracy_gbm = accuracy_score(y_test, y_pred_gbm)
+classification_report_gbm = classification_report(y_test, y_pred_gbm)
 
-
-########################################################################################################################
-#                                                                                                                      #
-#                                         MODEL DAĞITIMI VE UYGULAMA                                                   #
-#                                                                                                                      #
-# - Modelin Üretim Ortamına Entegrasyonu - STREAMLİT & HEROKU                                                          #
-# - Uygulamanın Kullanıcılarla Etkileşimi ve Geri Bildirim Toplama -GitHub'a yüklenmesi ve ardından interaktif webapp  #
-# uygulamaları aracılığıyla canlıya alındı.                                                                            #
-########################################################################################################################
-
+print(f"Accuracy for GBM: {accuracy_gbm:.4f}")
+print(f"Classification Report for GBM:\n{classification_report_gbm}")
 
 ########################################################################################################################
 #                                                                                                                      #
-#                                         PROJE RAPORU VE SUNUMU                                                       #
+#                                              MODEL KAYDETME                                                          #
 #                                                                                                                      #
-# - Proje Sürecinin Belgelendirilmesi.                                                                                 #
-# - Projenin Sonuçlarının Sunumu ve İletişimi. (Her bir analiz adımı için, bulgularını ve/veya seçilen yaklaşımların   #
-#  gerekçeleri adım adım açıklanmıştır.)                                                                               #
 ########################################################################################################################
 
 
+# Modeli dosyaya kaydet
+joblib.dump(gbm_model, 'mindmingle_gbm_model.pkl')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Modeli yüklemek için:
+# gbm_model = joblib.load('gbm_model.pkl')
 
 
