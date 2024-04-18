@@ -1,24 +1,10 @@
-
-# Öneri Sistemleri
-import numpy as np
-import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-# Html
-# pip install Flask
-from flask import Flask, request, render_template_string
-
-# Streamlit
 import streamlit as st
-
-# Analiz Görselleştirme
-
-import seaborn as sns
-import altair as alt
-import plotly.express as px
-from bokeh.plotting import figure, show
-
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MinMaxScaler
+import joblib
 
 # Örnek veri setleri yükleme, gerçek veri yüklemek için uygun yöntemler kullanılmalı
 netflix_data = pd.read_csv('netflix.csv')  # Netflix veri seti
