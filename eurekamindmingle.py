@@ -1,4 +1,5 @@
 from __1lib__ import *
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 # Örnek veri setleri yükleme, gerçek veri yüklemek için uygun yöntemler kullanılmalı
