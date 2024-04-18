@@ -1,5 +1,23 @@
-from __1lib__ import *
+
+# Öneri Sistemleri
+import numpy as np
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Html
+# pip install Flask
+from flask import Flask, request, render_template_string
+
+# Streamlit
+import streamlit as st
+
+# Analiz Görselleştirme
+import matplotlib.pyplot as plt
+import seaborn as sns
+import altair as alt
+import plotly.express as px
+from bokeh.plotting import figure, show
 
 
 # Örnek veri setleri yükleme, gerçek veri yüklemek için uygun yöntemler kullanılmalı
