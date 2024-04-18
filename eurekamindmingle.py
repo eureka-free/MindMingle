@@ -1,11 +1,4 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import sklearn
-from sklearn.preprocessing import MinMaxScaler
-import csv
-import os
-
+from __1lib__ import *
 
 
 # Örnek veri setleri yükleme, gerçek veri yüklemek için uygun yöntemler kullanılmalı
