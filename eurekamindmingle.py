@@ -13,7 +13,7 @@ from flask import Flask, request, render_template_string
 import streamlit as st
 
 # Analiz Görselleştirme
-import matplotlib.pyplot as plt
+
 import seaborn as sns
 import altair as alt
 import plotly.express as px
