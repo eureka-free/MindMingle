@@ -1,4 +1,3 @@
-
 from __1lib__ import *
 
 import csv
@@ -97,7 +96,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 
-st.sidebar.image(r"C:\Users\alcin\OneDrive\Masaüstü\projeMindMingle\logo.jpg", use_column_width=True)
+st.sidebar.image("logo.png", use_column_width=True)
 st.sidebar.title("EUREKA")
 # Sidebar metinleri
 st.sidebar.text("Aycan Karaçanta Kurt")
