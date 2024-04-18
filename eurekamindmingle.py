@@ -1,8 +1,10 @@
-from __1lib__ import *
-
+import streamlit as st
+import pandas as pd
+import numpy as np
+import sklearn
 import csv
 import os
-import streamlit as st
+
 
 
 # Örnek veri setleri yükleme, gerçek veri yüklemek için uygun yöntemler kullanılmalı
