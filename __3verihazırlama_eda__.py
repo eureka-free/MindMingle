@@ -1,14 +1,40 @@
 #######################################################################################################################
 #                                                                                                                     #
-#                                                                                                                     #
-#                                                                                                                     #
-#                                                                                                                     #
-#                                                                                                                     #
-#                                                                                                                     #
+#                                            MINDMINGLE                                                               #
 #                                                                                                                     #
 #######################################################################################################################
 
 
+#######################################################################################################################
+# Projemiz için kullanılan veri seti, kullanıcıların ruh haline uygun film ve müzik önerileri sağlamak amacıyla tasarlanmıştır. 
+# Bu veri seti, kullanıcıların duygusal durumlarını ve tercihlerini yansıtan çeşitli değişkenler içermektedir. 
+# Şimdi, bu veri setini inceleyerek hangi değişkenlerin bulunduğunu ve bunların anlamlarını belirleyeceğim. 
+# Veri setini açarak içeriğine daha detaylı bakalım.
+#######################################################################################################################
+
+# Veri setimiz, kullanıcıların mental sağlık durumlarına ve sosyal davranışlarına odaklanan çeşitli değişkenler içerir. 
+# İşte bu veri setindeki değişkenler ve açıklamaları:
+#######################################################################################################################
+
+#  **Gender**: Kullanıcının cinsiyeti.
+#  **Occupation**: Kullanıcının mesleği veya işi.
+#  **self_employed**: Kullanıcının kendi işinde çalışıp çalışmadığı.
+#  **family_history**: Kullanıcının ailesinde mental sağlık sorunlarının olup olmadığı.
+#  **treatment**: Kullanıcının mental sağlık tedavisi alıp almadığı.
+#  **Days_Indoors**: Kullanıcının ne kadar süreyle evden çıkmadığı.
+#  **Growing_Stress**: Kullanıcının stres seviyesinin artıp artmadığı.
+#  **Changes_Habits**: Kullanıcının alışkanlıklarında değişiklik olup olmadığı.
+#  **Mental_Health_History**: Kullanıcının geçmişte mental sağlık sorunları yaşayıp yaşamadığı.
+#  **Mood_Swings**: Kullanıcının ruh hali dalgalanmalarının şiddeti.
+#  **Coping_Struggles**: Kullanıcının zorluklarla başa çıkma yeteneği.
+#  **Work_Interest**: Kullanıcının işine olan ilgisi.
+#  **Social_Weakness**: Kullanıcının sosyal etkileşimlerde zayıflık yaşayıp yaşamadığı.
+
+# Bu değişkenler, kullanıcıların mental durumlarını ve sosyal etkileşimlerini analiz etmek için kullanılıyor. 
+# Bu bilgiler, projenizde kullanıcılara özelleştirilmiş film ve müzik önerileri sunmak için kullanılabilir. 
+# Öneri sistemi, bu verileri kullanarak kullanıcının anlık duygusal durumunu anlayabilir ve ona uygun içerikler 
+# sunarak duygusal iyi oluşunu destekler.
+#######################################################################################################################
 
 
 #######################################################################################################################
