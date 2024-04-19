@@ -3,6 +3,23 @@
 #                                            MINDMINGLE                                                               #
 #                                                                                                                     #
 #######################################################################################################################
+#######################################################################################################################
+
+# Projemizde, kişisel olarak özelleştirilmiş içerik önerileri sunarken, kişilerin mental sağlığı üzerinde belirgin 
+# bir etkiye sahip olduğunu tespit ettiğimiz belirli değişkenler üzerinde yoğunlaşmaktayız. Bu değişkenler; 
+# meslek (Occupation), ailede mental sağlık geçmişi (Family_history), cinsiyet (Gender), mental sağlık 
+# tedavisi alma durumu (Treatment), artan stres düzeyi (Growing_Stress), mental sağlık geçmişi (Mental_Health_History) 
+# ve evde geçirilen gün sayısı (Days_Indoors)'dur. Bu değişkenler kullanıcıların günlük mental durumlarını anlamak için 
+# önemli göstergelerdir.
+
+#  Projemiz, kullanıcılara tıbbi bir tedavi sunmak yerine, onların mental modlarını olumlu yönde etkilemeyi amaçlamaktadır. 
+# Bu nedenle, sosyal etkileşimlerini ve stres seviyelerini dikkate alarak kullanıcılara yönelik sorular geliştirdik. 
+# Özellikle, "Days_Indoors" değişkeni kullanıcıların ne kadar süreyle sosyal etkileşimden uzak kaldıklarını göstermekte, 
+# "Growing_Stress" değişkeni ise onların stres düzeylerini yansıtmaktadır. Bu bilgiler ışığında, kullanıcıların anlık mental 
+# modlarını tespit ederek, bu modlara uygun önerilerde bulunuyoruz. Kullanıcıların ruh hallerine uygun film ve müzik önerileri 
+# sunarak, onların duygusal iyi oluşlarını desteklemeyi hedefliyoruz. Bu süreçte, makine öğrenmesi ve tavsiye sistemlerinden 
+# yararlanarak, her bireyin ihtiyaçlarına en uygun içerikleri sunmayı amaçlamaktayız.
+#######################################################################################################################
 
 
 #######################################################################################################################
@@ -11,6 +28,8 @@
 # Şimdi, bu veri setini inceleyerek hangi değişkenlerin bulunduğunu ve bunların anlamlarını belirleyeceğim. 
 # Veri setini açarak içeriğine daha detaylı bakalım.
 #######################################################################################################################
+
+# SOURCE : GitHub : ['https://www.kaggle.com/datasets/divaniazzahra/mental-health-dataset']
 
 # Veri setimiz, kullanıcıların mental sağlık durumlarına ve sosyal davranışlarına odaklanan çeşitli değişkenler içerir. 
 # İşte bu veri setindeki değişkenler ve açıklamaları:
