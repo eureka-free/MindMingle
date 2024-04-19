@@ -38,9 +38,11 @@ Bu değişkenler, kullanıcıların mental durumlarını ve sosyal etkileşimler
 
 
 # Streamlit 🤩
+
+| Streamlit |MindMingle : 'https://mindmingleds14.streamlit.app/' |
+|--------------------:|------------------------------------------------|
 # #
 🎈 Projemizde, kullanıcıların ruh haline ve ihtiyaçlarına uygun film ve müzik sunarak, onların kişisel yolculuklarında rehberlik ediyoruz. Bu öneriler, kullanıcının anlık duygusal durumunu yansıtan, terapötik nitelikte içerikler içerebilir ve böylece onların duygusal iyi oluşunu destekler. Bu proje, makine öğrenmesi ve tavsiye sistemlerini  kullanarak bireylerin mental sağlığını desteklemeyi amaçlar. Kullanıcı dostu ara yüzümüz ve kişiye özel içerik önerilerimizle, her kullanıcının kendine uygun çözümleri bulmasına yardımcı olmayı hedefliyoruz.
 
 # # 
-| Streamlit |MindMingle : 'https://mindmingleds14.streamlit.app/' |
-|--------------------:|------------------------------------------------|
+
