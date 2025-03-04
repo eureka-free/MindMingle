@@ -146,11 +146,11 @@ def main():
         
     st.sidebar.title("EUREKA")
     st.sidebar.write("Ekip Üyeleri:")
-    st.sidebar.write("- Aycan Karaçanta Kurt")
+    st.sidebar.write("- Yasin Tanış")
     st.sidebar.write("- Can Umurhan Öksüz")
     st.sidebar.write("- Kadir Alçin")
     st.sidebar.write("- Meryem Tarhan Özkul")
-    st.sidebar.write("- Yasin Tanış")
+    st.sidebar.write("- Aycan Karaçanta Kurt")
     
     st.sidebar.title("MIUUL VERIPOTTER")
     
