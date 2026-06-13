@@ -217,15 +217,15 @@ print(recommended_books[['Book-Title', 'Book-Author']])
 # Ruh Hali Filtresi Fonksiyonu
 def filter_content_by_mood(mood, filtered_books=None, filtered_movies=None, filtered_songs=None):
     # Her bir içerik türü için ruh hali filtresi uygula
-    if mood == "Mutlu":
-        # Filtreleme ölçütleri belirle
-        pass  # Buraya filtreme kodları gelecek
-    elif mood == "Üzgün":
-        pass
-    elif mood == "Sinirli":
-        pass
-    elif mood == "Rahat":
-        pass
+    if filtered_movies is not None:
+        if mood == "Mutlu":
+            filtered_movies = filtered_movies[filtered_movies['listed_in'].str.contains("Comedy", na=False)]
+        elif mood == "Üzgün":
+            filtered_movies = filtered_movies[filtered_movies['listed_in'].str.contains("Drama", na=False)]
+        elif mood == "Sinirli":
+            filtered_movies = filtered_movies[filtered_movies['listed_in'].str.contains("Action", na=False)]
+        elif mood == "Rahat":
+            filtered_movies = filtered_movies[filtered_movies['listed_in'].str.contains("Documentary", na=False)]
     return filtered_books, filtered_movies, filtered_songs
 
 # Öneri Üretme Fonksiyonu
