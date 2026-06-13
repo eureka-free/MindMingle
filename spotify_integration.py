@@ -1,3 +1,4 @@
+import functools
 import streamlit as st
 import requests
 import base64
@@ -5,6 +6,13 @@ import json
 import time
 import pandas as pd
 from urllib.parse import urlencode
+
+
+@functools.lru_cache(maxsize=256)
+def _cached_spotify_get(url, access_token):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(url, headers=headers)
+    return response.json()
 
 # Spotify API bağlantısı için bilgiler
 # Gerçek bir uygulamada, bu bilgileri güvenli bir şekilde saklamalısınız
@@ -107,12 +115,8 @@ class SpotifyAPI:
             "limit": limit
         }
         
-        search_headers = {
-            "Authorization": f"Bearer {self.access_token}"
-        }
-        
-        search_response = requests.get(f"{search_endpoint}?{urlencode(search_params)}", headers=search_headers)
-        search_results = search_response.json()
+        url = f"{search_endpoint}?{urlencode(search_params)}"
+        search_results = _cached_spotify_get(url, self.access_token)
         
         if "tracks" in search_results and "items" in search_results["tracks"]:
             tracks = []
@@ -138,12 +142,7 @@ class SpotifyAPI:
         
         audio_features_endpoint = f"https://api.spotify.com/v1/audio-features/{track_id}"
         
-        audio_features_headers = {
-            "Authorization": f"Bearer {self.access_token}"
-        }
-        
-        audio_features_response = requests.get(audio_features_endpoint, headers=audio_features_headers)
-        audio_features = audio_features_response.json()
+        audio_features = _cached_spotify_get(audio_features_endpoint, self.access_token)
         
         return audio_features
     
@@ -179,15 +178,8 @@ class SpotifyAPI:
         if target_valence is not None:
             recommendations_params["target_valence"] = target_valence
         
-        recommendations_headers = {
-            "Authorization": f"Bearer {self.access_token}"
-        }
-        
-        recommendations_response = requests.get(
-            f"{recommendations_endpoint}?{urlencode(recommendations_params)}", 
-            headers=recommendations_headers
-        )
-        recommendations_results = recommendations_response.json()
+        url = f"{recommendations_endpoint}?{urlencode(recommendations_params)}"
+        recommendations_results = _cached_spotify_get(url, self.access_token)
         
         if "tracks" in recommendations_results:
             tracks = []
