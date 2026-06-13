@@ -231,7 +231,24 @@ def filter_content_by_mood(mood, filtered_books=None, filtered_movies=None, filt
 # Öneri Üretme Fonksiyonu
 def generate_recommendations(filtered_books, filtered_movies, filtered_songs):
     # İçerik tabanlı öneri algoritmalarını çalıştır
-    pass  # Buraya öneri algoritması kodları gelecek
+    recommendations = {}
+
+    if filtered_books is not None and not filtered_books.empty:
+        recommendations['books'] = filtered_books.sample(n=min(5, len(filtered_books)))
+    else:
+        recommendations['books'] = None
+
+    if filtered_movies is not None and not filtered_movies.empty:
+        recommendations['movies'] = filtered_movies.sample(n=min(5, len(filtered_movies)))
+    else:
+        recommendations['movies'] = None
+
+    if filtered_songs is not None and not filtered_songs.empty:
+        recommendations['songs'] = filtered_songs.sample(n=min(5, len(filtered_songs)))
+    else:
+        recommendations['songs'] = None
+
+    return recommendations
 
 # Modelin Kaydedilmesi
 
